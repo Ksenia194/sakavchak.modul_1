@@ -1,4 +1,12 @@
+.settings/
+*.iml
+.java/
 ### IntelliJ IDEA ###
+.idea/
+.idea/modules.xml
+.idea/misc.xml
+.idea/vcs.xml
+.idea/workspace.xml
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/

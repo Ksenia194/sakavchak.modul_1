@@ -1,4 +1,5 @@
-package PACKAGE_NAME;
-
 public enum Command {
+    ENCRYPT,
+    DECRYPT,
+    BRUTE_FORCE
 }
