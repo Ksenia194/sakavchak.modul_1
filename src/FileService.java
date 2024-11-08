@@ -1,5 +1,5 @@
-import javax.imageio.IIOException;
 import java.io.*;
+import java.util.Objects;
 
 public class FileService {
 
@@ -12,37 +12,34 @@ public class FileService {
                 content.append(line).append("\n");
             }
         } catch (IOException e) {
-            throw new RuntimeException("Помилка при читанні файлу" + file.getAbsolutePath(), e);
+            throw new RuntimeException("Помилка при читанні файлу: " + file.getAbsolutePath(), e);
         }
         return content.toString();
     }
 
-    public  static void writeToFile(File file, String content, String suffix) {
+    public static void writeToFile(File file, String content, String suffix) {
         String outputPath;
         final String fileName = file.getName();
 
-        if (suffix.equals("[DECRYPTED]") && fileName.contains("[ENCRYPTED")) {
+        if (suffix.equals("[DECRYPTED]") && fileName.contains("[ENCRYPTED]")) {
             outputPath = fileName.replace("[ENCRYPTED]", "[DECRYPTED]");
         } else {
             outputPath = addSuffixToFilePath(fileName, suffix);
         }
 
-        File outputFile = new File(outputPath);
-        if (!outputFile.exists()) {
-            try {
-                if (outputFile.createNewFile()) {
-                    System.out.println("Новий файл створено: " + outputPath);
-                } else {
-                    System.out.println("Не вдалося створити файл.");
-                }
-            } catch (IOException e) {
-                throw new RuntimeException("Помилка при створенні файлу: " + e.getMessage());
+        File outputFile = new File(Objects.requireNonNull(file.getParent()), outputPath);
+
+        try {
+            if (outputFile.createNewFile()) {
+                System.out.println("Новий файл створено: " + outputFile.getAbsolutePath());
             }
+        } catch (IOException e) {
+            throw new RuntimeException("Помилка при створенні файлу: " + e.getMessage());
         }
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
             writer.write(content);
-            System.out.println("Записано у файл: " + outputPath);
+            System.out.println("Записано у файл: " + outputFile.getAbsolutePath());
 
         } catch (IOException e) {
             throw new RuntimeException("Помилка при записі в файл: " + e.getMessage());
@@ -56,7 +53,6 @@ public class FileService {
         } else {
             return filePath + suffix;
         }
-
     }
-
 }
+
