@@ -1,5 +1,6 @@
 public enum Command {
     ENCRYPT,
     DECRYPT,
-    BRUTE_FORCE
+    BRUTE_FORCE,
+    NONE
 }
